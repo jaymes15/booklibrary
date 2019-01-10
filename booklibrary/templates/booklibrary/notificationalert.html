@@ -1,0 +1,99 @@
+
+
+
+{% load static from staticfiles %}
+
+
+
+
+
+<!doctype html>
+<html>
+		<head>
+											<meta charset="utf-8">
+											<link type="text/css" rel="stylesheet" href="{% static 'booklibrary/profile.css' %}">
+											
+											<meta name="viewport" content="width=device-width, initial-scale=1">
+											<title></title>
+											<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+					  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+					  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+									<link  type="text/css"  rel="stylesheet" href="{% static 'booklibrary/bootstrap.min.css' %}">
+		</head>
+		<body>
+		<header>
+		<div class='head'>
+		<h1>BOOKS</h1>
+		<div class="search-box">
+				
+			<hr/>	
+</div>
+</div>
+		</header>
+		<ul class="topnav">
+			  <li><a href="{% url 'booklibrary:book_paste_list' %}">Home</a></li>
+			  <li><a href="{% url 'booklibrary:book_paste_listdemo'  %}">Categories</a></li>
+			  <li><a href="{% url 'booklibrary:create'  %}">Upload a book</a></li>
+			  <li><a href="{% url 'booklibrary:otherusers'  %}">Community</a></li>
+			  <li class="right"><a  class="active"  href="{% url 'booklibrary:userprofile'  %}">Profile</a></li>
+		</ul>
+		
+		<body>
+			<div class='content'>
+				<div class='media'>
+						<div class='media-left'>
+							{% if user.userprofile.image %}
+		<img src="{{ user.userprofile.image.url}}"  class='media-object img-rounded img-responsive pic1'/>
+							{% endif %}
+							
+						</div>
+						<div class='media-body'>
+							<h1>Username:{{ user }}</h1>
+							<h2 class='media-heading'>{{ user.first_name }} {{ user.last_name}}</h2>
+							{% if user.userprofile.description%}
+							<h3>{{ user.userprofile.description }}</h3>
+						    {% endif %}
+
+						    {% if user.userprofile.city %}
+							<h3>city:{{ user.userprofile.city }}</h3>
+							{% endif %}
+
+						    {% if user.userprofile.age %}
+						    <h4>{{ user.userprofile.age }} yrs old</h4>
+							{% endif %}
+
+							{% if user.userprofile.gender %}
+							<h4>{{ user.userprofile.gender }}</h4>
+							{% endif %}
+
+
+							{% if user.userprofile.website %}
+							<h5>website:{{ user.userprofile.website }}</h5>
+							 {% endif %}
+
+                         
+							<h5>email:{{ user.email}}</h5>
+							 {{user.user}}
+							
+							
+							 
+							 <form action="{% url 'booklibrary:logout' %}" method='POST'>
+										{% csrf_token %}
+								<h4><button type='submit' class='btn btn-warning'>LOGOUT</button></p>
+	
+							</form>	 
+								<a href="{% url 'booklibrary:postbyuser' user.id %}">user activities</a>
+						</div>
+						
+					
+					</div>
+					<hr />
+		
+		
+		
+		
+			</div>
+		
+		</body>
+</html>		

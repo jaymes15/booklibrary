@@ -1,0 +1,99 @@
+
+
+
+
+		{% load static from staticfiles %}
+
+
+
+
+
+
+<!doctype html>
+<html>
+		<head>
+											<meta charset="utf-8">
+											<link type="text/css" rel="stylesheet" href="{% static 'booklibrary/community.css' %}">
+											
+											<meta name="viewport" content="width=device-width, initial-scale=1">
+											<title></title>
+											<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+					  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+					  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+									<link  type="text/css"  rel="stylesheet" href="{% static 'booklibrary/bootstrap.min.css' %}">
+		</head>
+		<body>
+		<header>
+		<div class='head'>
+		<h1>BOOKS</h1>
+		<div class="search-box">
+				<form method ='GET' action=''>
+					<p><input type="text" class="search-text" placeholder="search..." name="q" value='{{ request.get.q }}' > 
+				<input type="submit" value="search" class='searchbtn'></p>
+			</form>
+			<hr/>	
+</div>
+</div>
+		</header>
+		<ul class="topnav">
+			 <li><a  href="{% url 'booklibrary:book_paste_list' %}">Home</a></li>
+			  <li><a href="{% url 'booklibrary:book_paste_listdemo'  %}">Categories</a></li>
+			  <li><a href="{% url 'booklibrary:create'  %}">Upload a book</a></li>
+			  <li><a class="active" href="{% url 'booklibrary:otherusers'  %}">Community</a></li>
+			  <li class="right"><a href="{% url 'booklibrary:userprofile'  %}">Profile</a></li>
+		</ul>
+			<div class='welcome'>
+						<h3>Community</h3>
+			</div>
+		<div class='content'>	
+		<div class='container-fluid'>
+			<div class='row justify-content-md-center'>
+				
+				<div class='col-xs-6 hom'>
+						<h3>People You Following</h3>
+						{% if  friends %}
+							number of people you following:		{{ friends.count }}
+						{% for friend in friends %}
+							
+					<div class='media'>
+						<div class='media-left'>
+							{% if user.userprofile.image %}
+							<img src="{{ user.userprofile.image.url}}" class='media-object img-rounded pic'/>
+							{% endif %}
+						</div>
+						<div class='media-body'>
+							<h1 class='media-heading'>{{ friend.username }}</h1>
+							<h3>{{ friend.userprofile.description }}</h3>
+							
+							<h4><button type='button' class='btn btn-success'>
+									<a href="{% url 'booklibrary:otherusersprofile' pk=friend.pk  %}"><span style=" color:white" >View Profile</span></a>
+							</button>
+							<a href="{% url 'booklibrary:change_friends' operation='add' pk=friend.pk %}"><button type='button' class='btn btn-warning fol'>
+								UnFollow
+							</button></a></h4>
+						</div>
+					</div>	
+					<hr />
+					
+				
+				
+
+				{% endfor %}
+				{% endif %}
+				</div>
+				<div class='col-xs-5'>
+						<h3>People You Following</h3>
+								<a href="{% url 'booklibrary:otherusers'  %}"><button type='button' class='btn btn-warning fol'>
+								find friends
+							</button></a>
+							
+							
+				</div>	
+
+		</div>
+		</div>
+		</div>
+		</body>
+		</html>		
+					

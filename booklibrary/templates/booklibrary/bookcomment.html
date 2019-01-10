@@ -1,0 +1,108 @@
+
+
+
+
+{% load static from staticfiles %}
+	
+
+
+<!doctype html>
+<html>
+		<head>
+											<meta charset="utf-8">
+											<link type="text/css" rel="stylesheet" href="{% static 'booklibrary/comment.css' %}">
+											
+											<meta name="viewport" content="width=device-width, initial-scale=1">
+											<title></title>
+											<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+					  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+					  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+									<link  type="text/css"  rel="stylesheet" href="{% static 'booklibrary/bootstrap.min.css' %}">
+		</head>
+		<body>
+		<header>
+		<div class='head'>
+		<h1>BOOKS</h1>
+		<div class="search-box">
+			<form method ='GET' action=''>
+					<p><input type="text" class="search-text" placeholder="search..." name="q" value='{{ request.get.q }}' > 
+				<input type="submit" value="search" class='searchbtn'></p>
+			</form>
+			<hr/>	
+</div>
+</div>
+		</header>
+		<ul class="topnav">
+			  <li><a class="active" href="{% url 'booklibrary:book_paste_list' %}">Home</a></li>
+			  <li><a href="{% url 'booklibrary:book_paste_listdemo'  %}">Categories</a></li>
+			  <li><a href="{% url 'booklibrary:create'  %}">Upload a book</a></li>
+			  <li><a href="{% url 'booklibrary:otherusers'  %}">Community</a></li>
+			  <li class="right"><a href="{% url 'booklibrary:userprofile'  %}">Profile</a></li>
+		</ul>
+		<body>
+			<div class='content'>
+				<h3>Comments</h3>
+					<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">&#128172 comments</button>
+
+							  <!-- Modal -->
+							<div class="modal fade" id="myModal" role="dialog">
+								<div class="modal-dialog">
+								
+								  <!-- Modal content-->
+								 	<div class="modal-content">
+										<div class="modal-header">
+										  <button type="button" class="close" data-dismiss="modal">&times;</button>
+										  <h4 class="modal-title">ADD COMMENTS</h4>
+									   </div>
+									   <div class="modal-body">
+										  
+										 <form action="" method="POST"> 
+														{% csrf_token %} 
+	
+														{{ p_form.as_p }} 
+	
+												
+										
+										</div>
+										<div class="modal-footer">
+										  <button type="submit" class="btn btn-default" data-dismiss="modal">POST</button>
+										  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+										</div>
+								  	</div>
+								  
+								</div>
+							</div>
+						</form> 
+							 
+	 				<p>total number of comments {{ text.count }}</p>
+	 				{% for comment in text %}
+				<div class='media'>
+						
+						<div class='media-left'>
+							<img src="{{ user.userprofile.image.url}}"  class='media-object img-rounded img-responsive pic1'/>
+						</div>
+						<div class='media-body'>
+							<h3><b> {{ comment.name }} </b> <small>said {{ comment.text }}</small></h3>
+							 <p>said on {{ comment.created_on }}</p>
+						</div>
+						
+					
+				</div>
+				<hr />
+				{% endfor %}
+				 
+		
+		
+		
+		
+			</div>
+		
+		
+	
+
+ 				
+
+	</body>
+</html>									
+ 

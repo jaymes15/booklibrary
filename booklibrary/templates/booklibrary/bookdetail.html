@@ -1,0 +1,127 @@
+ 
+{% load static from staticfiles %} 
+
+
+
+
+<!doctype html>
+<html>
+		<head>
+											<meta charset="utf-8">
+											<link type="text/css" rel="stylesheet" href="{% static 'booklibrary/detail.css' %}">
+											
+											<meta name="viewport" content="width=device-width, initial-scale=1">
+											<title></title>
+											<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+					  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+					  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+									<link  type="text/css"  rel="stylesheet" href="{% static 'booklibrary/bootstrap.min.css' %}">
+									
+									<script>
+					
+											function addone(field) {
+						field.value = Number(field.value) + 1;
+						}
+
+						function subtractone(field) {
+						field.value = Number(field.value) - 1;
+						}
+		</script>
+		</head>
+				<body>
+
+		<header>
+		<div class='head'>
+		<h1>BOOKS</h1>
+		<div class="search-box">
+				<p><input type="text" class="search-text" placeholder="search..." name="search_box" > 
+			<input type="submit" value="search" class='searchbtn'></p>
+			
+			<hr/>	
+</div>
+</div>
+		</header>
+		<ul class="topnav">
+			  <li><a class="active" href="{% url 'booklibrary:book_paste_list' %}">Home</a></li>
+			  <li><a href="{% url 'booklibrary:book_paste_listdemo'  %}">Categories</a></li>
+			  <li><a href="{% url 'booklibrary:create'  %}">Upload a book</a></li>
+			  <li><a href="{% url 'booklibrary:otherusers'  %}">Community</a></li>
+			  <li class="right"><a href="{% url 'booklibrary:userprofile'  %}">Profile</a></li>
+		</ul>
+		
+			<div class='content'>
+			<div class='container'>
+			<h1>Book Review</h1>
+				<div class='media'>
+					<div class='media-left'>
+						<img src="{{ object.book_cover.url}}" width='180px' height='250px' class='media-object pic'/>
+					</div>
+					<div class='media-body'>
+						<h1 class='media-heading'>{{object.title}}</h1>
+						<h3>written by {{ object.author }}</h3>
+						<h4>in {{ object.category }}</h4>
+						<p>uploaded by {{ post.user }}</p>
+						<p>created on {{ object.created_on }}</p>
+						<a href="{{ object.upload_book.url }}"><h4><button type='button' class='btn btn-success'>
+								<span style=" color:white" >Read book</span>
+						</button></h4></a>
+						<p><button type='button' class='btn btn-warning'>
+						Download book
+						</button></p>
+						
+					
+					</div>
+					
+					<h4 >
+					{{ object.text }}	
+
+					</h4>
+					<form method='POST' action='{% url "booklibrary:like_post" %}' >
+						{% csrf_token %}
+				
+					<!--input type="submit" onclick="this.disabled = true" value="Save" -->
+					
+					{% if is_liked %}
+					<button type='submit' name='post_id' class='btn btn-danger' value='{{ post.id }}'>Unlike</button>
+					{% else %}
+					<button type='submit' name='post_id' class='btn btn-primary' value='{{ post.id }}'>like</button>
+					{% endif %}
+
+
+
+
+
+
+					  <a href="{% url 'booklibrary:bookcomment' post_id=post.id  %}">&#128172 comments</a>
+					<a href="#">&#128279 Share</a>
+</div> 
+</form>
+					
+					
+					
+				
+					
+				</div>
+				
+			</div>
+			
+
+	</body>
+</html>	
+
+
+
+<h2>{{ text.category }}</h2>
+{% for post in text %} 
+	<div class='media-left'>
+								<img src="{{ post.book_cover.url}}" width='150px' height='200px' class='media-object pic'/>
+							</div>
+							<div class='media-body'>
+								<h1 class='media-heading'>{{post.title}}</h1>
+								<h3>written by {{ post.author }} <br />in  {{post.category}} </h3>
+								<p>{{ post.created_on}}</p>
+								<h4><button type='button' class='btn btn-success'>
+								<a href=""><span style=" color:white" >view book details</span></a>
+
+ {% endfor %} 
