@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'booklib.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME':'library',
+        'NAME':'booklibrary',
         'USER':'solar',
         'PASSWORD':'omotosho15',
         'HOST':"localhost",

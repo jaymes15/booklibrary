@@ -22,7 +22,7 @@ urlpatterns = [
     # url(r'^(?P<slug>[-\w]+)/comment/$',Comment.as_view(),name='bookcomment'),
    #path('addcomment/<int:id>', Comment.as_view(), name='addcomment'),
     path('comment/<int:post_id>', views.display_comment, name='bookcomment'),
-    path('addcomment/<int:post_id>', views.add_comment, name='addcomment'),
+    path('addcomment/<int:id>', views.add_comment, name='addcomment'),
     #path('addcomment/<int:post_id>',views.add_comment,name='add_comment'),
     path('category/<int:category_id>', views.display_category, name='displaycategory'),
 
@@ -36,7 +36,9 @@ urlpatterns = [
    # path('createinfouser/', createinfouser.as_view(), name='createinfouser'),
     path('otherusers/', Usersview.as_view(), name='otherusers'),
     path('friendview/', Friendview.as_view(), name='friendview'),
-    path('like/',views.like_post,name='like_post')
+    path('like/',views.like_post,name='like_post'),
+    path('favourites/<int:id>', views.favourite_book,name='favourite_book'),
+    path('favouritebooks/', views.userfavourite_book,name='userfavourite_book'),
 
 
    

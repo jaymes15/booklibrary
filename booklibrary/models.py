@@ -35,7 +35,7 @@ class Post(models.Model):
 
 	        category = models.ForeignKey(Category, on_delete=models.CASCADE)
 	        title = models.CharField(max_length=100)
-	        slug = models.SlugField(unique=True)
+	        #slug = models.SlugField(unique=True)
 	        book_cover = models.ImageField(default='default.png', blank =True)
 	        text = models.TextField()
 	        upload_book = models.FileField(blank =True)
@@ -43,6 +43,8 @@ class Post(models.Model):
 	        author = models.CharField(max_length=100)
 	        user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,default=1)
 	        likes = models.ManyToManyField(User,related_name='likes',blank=True)
+	        favourite = models.ManyToManyField(User,related_name='favourite',blank=True)
+
 
 	        # comments = models.TextField()
 
@@ -54,6 +56,15 @@ class Post(models.Model):
 
 	        def __str__(self):
 	        	return "%s by %s, %s"  %(self.title,self.author,self.created_on)
+
+
+	        def total_likes(self):
+	        		return self.likes.count()	
+'''
+
+
+
+
 	        
 def save(self, *args, **kwargs):
 	if not self.slug:
@@ -63,13 +74,13 @@ def save(self, *args, **kwargs):
 
 	super(Post, self).save(*args, **kwargs)
 
-
+'''
 
 
 
 class Comment(models.Model): 
 
-	name =models.CharField(max_length=500)
+	name = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,default=1)
 	email = models.EmailField(max_length=75) 
 	website = models.URLField(max_length=200, null=True, blank=True) 
 	text = models.TextField() 

@@ -13,6 +13,7 @@
 											<meta name="viewport" content="width=device-width, initial-scale=1">
 											<title></title>
 											<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+											<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 					  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 					  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
@@ -33,10 +34,9 @@
 
 		<header>
 		<div class='head'>
-		<h1>BOOKS</h1>
+			<h1><img src="{% static 'booklibrary/kkk.jpg' %}"  class="logo" /></h1>
 		<div class="search-box">
-				<p><input type="text" class="search-text" placeholder="search..." name="search_box" > 
-			<input type="submit" value="search" class='searchbtn'></p>
+				
 			
 			<hr/>	
 </div>
@@ -46,55 +46,110 @@
 			  <li><a class="active" href="{% url 'booklibrary:book_paste_list' %}">Home</a></li>
 			  <li><a href="{% url 'booklibrary:book_paste_listdemo'  %}">Categories</a></li>
 			  <li><a href="{% url 'booklibrary:create'  %}">Upload a book</a></li>
+			  {% if not request.user.is_authenticated %}
+			  <li><a href="{% url 'booklibrary:login'  %}">Login</a></li>
+			  {% endif %}
+			  {% if request.user.is_authenticated %}
 			  <li><a href="{% url 'booklibrary:otherusers'  %}">Community</a></li>
+			  {% endif %}
+			  {% if request.user.is_authenticated %}
+			  <li><a href="{% url 'booklibrary:userfavourite_book'  %}">Favourite books</a></li>
+			  {% endif %}
 			  <li class="right"><a href="{% url 'booklibrary:userprofile'  %}">Profile</a></li>
 		</ul>
 		
 			<div class='content'>
 			<div class='container'>
-			<h1>Book Review</h1>
+		
 				<div class='media'>
 					<div class='media-left'>
-						<img src="{{ object.book_cover.url}}" width='180px' height='250px' class='media-object pic'/>
+						<img src="{{ obj.book_cover.url}}" width='180px' height='250px' class='media-object pic'/>
 					</div>
 					<div class='media-body'>
-						<h1 class='media-heading'>{{object.title}}</h1>
-						<h3>written by {{ object.author }}</h3>
-						<h4>in {{ object.category }}</h4>
-						<p>uploaded by {{ post.user }}</p>
-						<p>created on {{ object.created_on }}</p>
-						<a href="{{ object.upload_book.url }}"><h4><button type='button' class='btn btn-success'>
+						<h1 class='media-heading'>{{obj.title}}</h1>
+						<h3>written by {{ obj.author }}</h3>
+						<h4>in {{ obj.category }}</h4>
+						<p>uploaded by {{ obj.user }}</p>
+						<p>created on {{ obj.created_on }}</p>
+						<a href="{{ obj.upload_book.url }}"><h4><button type='button' class='btn btn-success'>
 								<span style=" color:white" >Read book</span>
 						</button></h4></a>
-						<p><button type='button' class='btn btn-warning'>
+						<a href="{{ obj.upload_book.url }}" download><p><button type='button' class='btn btn-warning'>
 						Download book
-						</button></p>
+						</button></p></a>
 						
 					
 					</div>
 					
 					<h4 >
-					{{ object.text }}	
+					{{ obj.text }}	
 
 					</h4>
+
+					{{ total_likes }} Like{{ total_likes|pluralize }} 
+					{% if request.user.is_authenticated %}
 					<form method='POST' action='{% url "booklibrary:like_post" %}' >
 						{% csrf_token %}
 				
 					<!--input type="submit" onclick="this.disabled = true" value="Save" -->
 					
 					{% if is_liked %}
-					<button type='submit' name='post_id' class='btn btn-danger' value='{{ post.id }}'>Unlike</button>
+							<button type='submit' name='obj_id' class='btn btn-danger' value='{{ obj.id }}'>Unlike</button>
 					{% else %}
-					<button type='submit' name='post_id' class='btn btn-primary' value='{{ post.id }}'>like</button>
+							<button type='submit' name='obj_id' class='btn btn-primary' value='{{ obj.id }}'>like</button>
 					{% endif %}
 
 
 
+						
+						 <a href="{% url 'booklibrary:addcomment' obj.id  %}">&#128172 leave a comment</a> 
+					{% if is_favourite %}	 
+					<a href='{% url "booklibrary:favourite_book" id=obj.id %}'>
+						<i class="fas fa-heart lg">Save
+							
+						</i>
+					</a>
+					{% else %}
+							<a href='{% url "booklibrary:favourite_book" id=obj.id %}'>
+						<i class="far fa-heart lg">Save
+							
+						</i>
+					</a>
+					{% endif %}
+
+				</form>
+				{% else %}
+				 <p> please login to like or leave a comment</p>
+				{% endif %}
 
 
+					{% if text %}
+							<h3>Comments</h3>
+							<p>total number of comments {{ text.count }}</p>
 
-					  <a href="{% url 'booklibrary:bookcomment' post_id=post.id  %}">&#128172 comments</a>
-					<a href="#">&#128279 Share</a>
+
+					 {% for comment in text %}
+							
+				<div class='media'>
+						
+						<div class='media-left'>
+							{% if user.userprofile.image %}
+							<img src="{{ user.userprofile.image.url}}"  class='media-object img-rounded img-responsive pic1'/>
+							{% endif %}
+						</div>
+						<div class='media-body'>
+							<h3><b> {{ comment.name }} </b> <small>said {{ comment.text }}</small></h3>
+							 <p>said on {{ comment.created_on }}</p>
+						</div>
+						
+						
+					
+				</div>
+				<hr />
+					{% endfor %}
+					{% else %}
+							<h3>No Comments</h3>
+					{% endif %}		
 </div> 
 </form>
 					
@@ -112,16 +167,3 @@
 
 
 
-<h2>{{ text.category }}</h2>
-{% for post in text %} 
-	<div class='media-left'>
-								<img src="{{ post.book_cover.url}}" width='150px' height='200px' class='media-object pic'/>
-							</div>
-							<div class='media-body'>
-								<h1 class='media-heading'>{{post.title}}</h1>
-								<h3>written by {{ post.author }} <br />in  {{post.category}} </h3>
-								<p>{{ post.created_on}}</p>
-								<h4><button type='button' class='btn btn-success'>
-								<a href=""><span style=" color:white" >view book details</span></a>
-
- {% endfor %} 

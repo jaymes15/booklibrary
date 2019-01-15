@@ -98,8 +98,15 @@ body h3{
   background-color:black;
   border-style:none;
   color:white;
+
  
 }
+.logo{
+  height:150px;
+   width:220px;
+   margin-top:-30px;
+}
+
   /* Style the search box inside the navigation bar */
 .search-box input[type=text] {
   position:absolute;

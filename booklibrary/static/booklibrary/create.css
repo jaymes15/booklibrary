@@ -66,6 +66,12 @@ ul.topnav li.right {float: right;}
     ul.topnav li {float: none;}
 }
 
+.logo{
+  height:70px;
+   width:220px;
+   margin-top:-10px;
+}
+
 	
 .welcome h3{
 	margin-left:10px;
@@ -76,4 +82,15 @@ ul.topnav li.right {float: right;}
 .content{
   margin-left: 50px;
   margin-right: 50px;
+}
+@media only screen and (max-width: 480px) {
+ 
+
+.logo{
+  height:50px;
+   width:190px;
+   margin-top:-10px;
+}
+
+
 }

@@ -26,7 +26,7 @@
 				<body>
 		<header>
 		<div class='head'>
-		<h1>BOOKS</h1>
+		<h1><img src="{% static 'booklibrary/kkk.jpg' %}" class='logo'/></h1>
 		<div class="search-box">
 				
 			<hr/>	
@@ -38,6 +38,9 @@
 			  <li><a href="{% url 'booklibrary:book_paste_listdemo'  %}">Categories</a></li>
 			  <li><a class="active" href="{% url 'booklibrary:create'  %}">Upload a book</a></li>
 			  <li><a href="{% url 'booklibrary:otherusers'  %}">Community</a></li>
+			  {% if request.user.is_authenticated %}
+			  <li><a href="{% url 'booklibrary:userfavourite_book'  %}">Favourite books</a></li>
+			  {% endif %}
 			  <li class="right"><a href="{% url 'booklibrary:userprofile'  %}">Profile</a></li>
 		</ul>
 		<div class='content'>

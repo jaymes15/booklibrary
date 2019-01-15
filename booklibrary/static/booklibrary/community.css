@@ -87,6 +87,14 @@ ul.topnav li.right {float: right;}
 .content{
   margin-left: 50px;
 }
+.logo{
+  height:50px;
+   width:220px;
+   margin-top:-30px;
+}
+.tex{
+  margin-bottom: 70px;
+}
 
 @media only screen and (max-width: 480px) {
 
@@ -104,6 +112,13 @@ ul.topnav li.right {float: right;}
   color:white;
  
 }
+.logo{
+  height:50px;
+   width:100px;
+   margin-top:-5px;
+}
+
+
   /* Style the search box inside the navigation bar */
 .search-box input[type=text] {
   position:absolute;

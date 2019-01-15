@@ -26,7 +26,7 @@
 		<body>
 		<header>
 		<div class='head'>
-		<h1>BOOKS</h1>
+		<h1><img src="{% static 'booklibrary/kkk.jpg' %}"  height='50px' width='220px'/></h1>
 		<div class="search-box">
 				<form method ='GET' action=''>
 					<p><input type="text" class="search-text" placeholder="search..." name="q" value='{{ request.get.q }}' > 
@@ -41,57 +41,56 @@
 			  <li><a href="{% url 'booklibrary:book_paste_listdemo'  %}">Categories</a></li>
 			  <li><a href="{% url 'booklibrary:create'  %}">Upload a book</a></li>
 			  <li><a class="active" href="{% url 'booklibrary:otherusers'  %}">Community</a></li>
+			  {% if request.user.is_authenticated %}
+			  <li><a href="{% url 'booklibrary:userfavourite_book'  %}">Favourite books</a></li>
+			  {% endif %}
 			  <li class="right"><a href="{% url 'booklibrary:userprofile'  %}">Profile</a></li>
 		</ul>
 			<div class='welcome'>
-						<h3>Community</h3>
+						<h3>Community<a href="{% url 'booklibrary:otherusers'  %}"><button type='button' class='btn btn-warning fol'>
+								find friends
+							</button></a></h3>
+							
 			</div>
 		<div class='content'>	
 		<div class='container-fluid'>
-			<div class='row justify-content-md-center'>
-				
-				<div class='col-xs-6 hom'>
+			<div class='tex'>
 						<h3>People You Following</h3>
+					</div>	
 						{% if  friends %}
 							number of people you following:		{{ friends.count }}
 						{% for friend in friends %}
 							
-					<div class='media'>
-						<div class='media-left'>
-							{% if user.userprofile.image %}
-							<img src="{{ user.userprofile.image.url}}" class='media-object img-rounded pic'/>
-							{% endif %}
-						</div>
-						<div class='media-body'>
+					
+								{% if friend.userprofile.image %}
+									<img src="{{ friend.userprofile.image.url}}" class='media-object img-rounded pic'/>
+								{% endif %}
+						
+						
 							<h1 class='media-heading'>{{ friend.username }}</h1>
 							<h3>{{ friend.userprofile.description }}</h3>
 							
 							<h4><button type='button' class='btn btn-success'>
 									<a href="{% url 'booklibrary:otherusersprofile' pk=friend.pk  %}"><span style=" color:white" >View Profile</span></a>
-							</button>
-							<a href="{% url 'booklibrary:change_friends' operation='add' pk=friend.pk %}"><button type='button' class='btn btn-warning fol'>
+							</button></h4>
+							<h4><a href="{% url 'booklibrary:change_friends' operation='remove' pk=friend.pk %}"><button type='button' class='btn btn-warning fol'>
 								UnFollow
 							</button></a></h4>
-						</div>
-					</div>	
+						
 					<hr />
 					
 				
 				
 
 				{% endfor %}
+				{% else %}
+					<h3>No friends</h3>
 				{% endif %}
-				</div>
-				<div class='col-xs-5'>
-						<h3>People You Following</h3>
-								<a href="{% url 'booklibrary:otherusers'  %}"><button type='button' class='btn btn-warning fol'>
-								find friends
-							</button></a>
+				
+					
 							
 							
-				</div>	
-
-		</div>
+				
 		</div>
 		</div>
 		</body>

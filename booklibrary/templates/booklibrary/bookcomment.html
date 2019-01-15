@@ -23,7 +23,7 @@
 		<body>
 		<header>
 		<div class='head'>
-		<h1>BOOKS</h1>
+		<h1><img src="{% static 'booklibrary/kkk.jpg' %}"  height='50px' width='220px'/></h1>
 		<div class="search-box">
 			<form method ='GET' action=''>
 					<p><input type="text" class="search-text" placeholder="search..." name="q" value='{{ request.get.q }}' > 
@@ -38,45 +38,23 @@
 			  <li><a href="{% url 'booklibrary:book_paste_listdemo'  %}">Categories</a></li>
 			  <li><a href="{% url 'booklibrary:create'  %}">Upload a book</a></li>
 			  <li><a href="{% url 'booklibrary:otherusers'  %}">Community</a></li>
+			  {% if request.user.is_authenticated %}
+			  <li><a href="{% url 'booklibrary:userfavourite_book'  %}">Favourite books</a></li>
+			  {% endif %}
 			  <li class="right"><a href="{% url 'booklibrary:userprofile'  %}">Profile</a></li>
 		</ul>
 		<body>
 			<div class='content'>
 				<h3>Comments</h3>
-					<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">&#128172 comments</button>
-
+					
+					
 							  <!-- Modal -->
-							<div class="modal fade" id="myModal" role="dialog">
-								<div class="modal-dialog">
-								
-								  <!-- Modal content-->
-								 	<div class="modal-content">
-										<div class="modal-header">
-										  <button type="button" class="close" data-dismiss="modal">&times;</button>
-										  <h4 class="modal-title">ADD COMMENTS</h4>
-									   </div>
-									   <div class="modal-body">
-										  
-										 <form action="" method="POST"> 
-														{% csrf_token %} 
-	
-														{{ p_form.as_p }} 
-	
-												
-										
-										</div>
-										<div class="modal-footer">
-										  <button type="submit" class="btn btn-default" data-dismiss="modal">POST</button>
-										  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-										</div>
-								  	</div>
-								  
-								</div>
-							</div>
-						</form> 
+					{% if text %}	
+							
 							 
 	 				<p>total number of comments {{ text.count }}</p>
-	 				{% for comment in text %}
+	 				 {% for comment in text %}
+							
 				<div class='media'>
 						
 						<div class='media-left'>
@@ -87,12 +65,17 @@
 							 <p>said on {{ comment.created_on }}</p>
 						</div>
 						
+						
 					
 				</div>
 				<hr />
-				{% endfor %}
-				 
-		
+					{% endfor %}
+				 {% else %}
+				 no comment
+				 <a href=""><button type="button" class="btn btn-info btn-sm" >&#128172 comments</button></a>
+
+					
+				{% endif %}
 		
 		
 		

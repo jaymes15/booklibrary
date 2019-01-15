@@ -1,5 +1,9 @@
 
-
+.logo{
+  height:50px;
+   width:220px;
+   margin-top:-30px;
+}
 
 		/* Style the search box inside the navigation bar */
 .search-box input[type=text] {
@@ -72,7 +76,9 @@ ul.topnav li.right {float: right;}
     ul.topnav li {float: none;}
 }
 
-	
+.fot{
+  text-align: center;
+}	
 .welcome h3{
 	margin-left:10px;
 	padding-left: 10px;
@@ -93,6 +99,12 @@ ul.topnav li.right {float: right;}
   color:white;
  
 }
+.logo{
+  height:50px;
+   width:100px;
+   margin-top:-30px;
+}
+
 	/* Style the search box inside the navigation bar */
 .search-box input[type=text] {
   position:absolute;

@@ -9,7 +9,14 @@ body{
 header{
 	margin-bottom:150px;
 	color:blue;
-	padding-left:30px;
+	padding-left:30px
+	
+	width:400px;
+}
+.logo{
+	height:150px;
+	 width:400px;
+	 margin-top:-30px;
 }
 .loginbox input[type="text"],input[type="password"]{
 	border:none;
@@ -58,6 +65,11 @@ div.loginbox {
 body h3{
 	margin-left: 
 	
+}
+.logo{
+	height:150px;
+	 width:220px;
+	 margin-top:-30px;
 }
 
 

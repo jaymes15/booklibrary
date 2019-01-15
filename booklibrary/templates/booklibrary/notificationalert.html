@@ -1,6 +1,3 @@
-
-
-
 {% load static from staticfiles %}
 
 
@@ -24,7 +21,7 @@
 		<body>
 		<header>
 		<div class='head'>
-		<h1>BOOKS</h1>
+		<h1><img src="{% static 'booklibrary/kkk.jpg' %}"  height='50px' width='220px'/></h1>
 		<div class="search-box">
 				
 			<hr/>	
@@ -36,21 +33,29 @@
 			  <li><a href="{% url 'booklibrary:book_paste_listdemo'  %}">Categories</a></li>
 			  <li><a href="{% url 'booklibrary:create'  %}">Upload a book</a></li>
 			  <li><a href="{% url 'booklibrary:otherusers'  %}">Community</a></li>
+			  {% if request.user.is_authenticated %}
+			  <li><a href="{% url 'booklibrary:userfavourite_book'  %}">Favourite books</a></li>
+			  {% endif %}
 			  <li class="right"><a  class="active"  href="{% url 'booklibrary:userprofile'  %}">Profile</a></li>
 		</ul>
 		
 		<body>
 			<div class='content'>
-				<div class='media'>
-						<div class='media-left'>
+				<div class='container-fluid'>
+			<div class='row justify-content-md-center'>
+				<div class='col-sm-4'>
+					<div class = 'quote'>
+			
 							{% if user.userprofile.image %}
-		<img src="{{ user.userprofile.image.url}}"  class='media-object img-rounded img-responsive pic1'/>
+									<img src="{{ user.userprofile.image.url }}"  class='media-object img-rounded img-responsive pic1'/>
 							{% endif %}
-							
 						</div>
-						<div class='media-body'>
-							<h1>Username:{{ user }}</h1>
-							<h2 class='media-heading'>{{ user.first_name }} {{ user.last_name}}</h2>
+					
+						</div>
+				<div class='col-sm-8'>
+					<div class = 'text'>
+							<h4>Username:{{ user }}</h4>
+							<h3 class='media-heading'>{{ user.first_name }} {{ user.last_name}}</h3>
 							{% if user.userprofile.description%}
 							<h3>{{ user.userprofile.description }}</h3>
 						    {% endif %}
@@ -76,7 +81,9 @@
 							<h5>email:{{ user.email}}</h5>
 							 {{user.user}}
 							
-							
+							<a href="{% url 'booklibrary:edituserprofile'  %}"><h4><button type='button' class='btn btn-success'>
+									<span style=" color:white" >Edit Profile</span>
+							</button></a></h4>
 							 
 							 <form action="{% url 'booklibrary:logout' %}" method='POST'>
 										{% csrf_token %}
@@ -84,11 +91,12 @@
 	
 							</form>	 
 								<a href="{% url 'booklibrary:postbyuser' user.id %}">user activities</a>
-						</div>
+							</div>
 						
 					
-					</div>
-					<hr />
+					</div>		
+			</div>			
+		</div>
 		
 		
 		

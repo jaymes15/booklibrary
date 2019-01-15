@@ -78,19 +78,32 @@ ul.topnav li.right {float: right;}
 .content{
 	margin-left:100px;
 }
-.pic1{
-	height:300px;
-	width:300px;
-}
+
 body h2{
 	font-size:80px;
 }
 body h3{
 	font-size:40px;
 }
+.quote{
+  position:absolute;
+  left:300px;
+}
 
-media only screen and (max-width: 480px) {
- 
-
+@media only screen and (max-width: 480px) {
+  .logo{
+  height:150px;
+   width:220px;
+   margin-top:-30px;
+}
+.quote{
+  position:absolute;
+  left:10px;
+}
+.text{
+  position: absolute;
+  top:200px;
+  left:-20px;
+}
 
 }

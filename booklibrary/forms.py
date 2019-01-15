@@ -13,12 +13,15 @@ class PostForm(forms.ModelForm):
 
 
 	        	}))
+	        '''
 	        slug = forms.SlugField(widget=forms.TextInput(
 	        	attrs={
 	        			'class':'form-control',
 
 
 	        	}))
+
+	        	'''
 	        text =  forms.CharField(widget=forms.Textarea(
 	        	attrs={
 	        			'class':'form-control',
@@ -33,12 +36,19 @@ class PostForm(forms.ModelForm):
 	        	}))
 	        class Meta:
 	        	model = Post
-	        	exclude = ['created_on','user']
+	        	exclude = ['created_on','user','favourite','likes']
 
-class CommentForm(forms.ModelForm): 
- 	class Meta: 
+class CommentForm(forms.ModelForm):
+	
+	text =  forms.CharField(widget=forms.Textarea(
+	        	attrs={
+	        			'class':'form-control',
+
+
+	        	}))
+	class Meta: 
  		model = Comment 
- 		fields = ['name','text']
+ 		fields = ['text']
 
 class RegistrationForm(UserCreationForm):
 	email = forms.EmailField(required=True,widget=forms.TextInput(

@@ -66,38 +66,35 @@ def view_comment(request, slug):
 # 	context_object_name = 'queryset'
 
 def display_comment(request, post_id):
-	text = Comment.objects.filter(post_id= post_id)
-	if request.method == 'POST':
-				
-				p_form = CommentForm(request.POST,post_id=post_id)
-				
-				if p_form.is_valid()  :
-						p_form.save()
-						return redirect('booklibrary:bookcomment')
-	else:
+	text = Comment.objects.filter(post_id= post_id).order_by('-created_on')
+	
 			
-			p_form = CommentForm( )
-			
-			
-	context =    {'text':text,'p_form':p_form}
+	context =    {'text':text}
 	return render(request, 'booklibrary/bookcomment.html', context)
-'''
-def add_comment(request):
-	post = get_object_or_404(Post, post_id=post_id)
+
+
+
+@login_required(login_url="/login/")
+def add_comment(request,id):
+	post = get_object_or_404(Post,id=id)
 	
 	if request.method == 'POST':
 			p_form = CommentForm(request.POST)
 			if p_form.is_valid()  :
 				comment=p_form.save(commit=False)
 				comment.post = post
+				comment.name = request.user
 				comment.save()
-				return redirect('booklibrary:bookcomment',post_id=post.id)
+				
+				#return redirect(request.path) 
+				return redirect('booklibrary:book_paste_detail',pk=id)
 	else:
 			p_form = CommentForm()
 			context = {'p_form':p_form}
 			return render(request, 'booklibrary/addcomment.html', context)
 
-'''
+
+
 		
 '''
 		if request.method == 'POST':
@@ -136,6 +133,7 @@ def display_category(request,category_id):
 		text = text.filter(Q(title__icontains=query)|
 						   Q(text__icontains=query)|
 						   Q(author__icontains=query)
+						   
 						   )
 
 		
@@ -172,9 +170,8 @@ def postbyuser(request,user_id):
 
 
 
-class BookDetail(DetailView):
-	model = Post
-	template_name = 'booklibrary/bookdetail.html'
+
+
 
 
 
@@ -182,15 +179,15 @@ class BookDetail(DetailView):
 
 
 def like_post(request):
-	post = get_object_or_404(Post,id=request.POST.get('post_id'))
+	obj = get_object_or_404(Post,id=request.POST.get('obj_id'))
 	is_liked = False
-	if post.likes.filter(id=request.user.id).exists():
-		post.likes.remove(request.user)
+	if obj.likes.filter(id=request.user.id).exists():
+		obj.likes.remove(request.user)
 		is_liked = False
 	else:	
-		post.likes.add(request.user)
-		is_liked = True
-	return HttpResponseRedirect(post.get_absolute_url())
+			obj.likes.add(request.user)
+			is_liked = True
+	return HttpResponseRedirect(obj.get_absolute_url())
 
 
 '''
@@ -220,12 +217,16 @@ class BookList(ListView):
 	 def get(self,request):
 	  	 model = Post
 	  	 queryset = Post.objects.all().order_by('-created_on')
-	  	 query = request.GET.get('q')
+	  	 query = request.GET.get("q")
 	  	 if query:
-	  	 	queryset =  queryset.filter(Q(title__icontains=query)|
-						   Q(text__icontains=query)|
-						   Q(author__icontains=query)
-						   )
+	  	 	queryset =  queryset.filter(
+	  	 			Q(title__icontains=query)|
+					Q(text__icontains=query)|
+					Q(author__icontains=query)
+	  	 			
+	  	 									)
+
+	  	 									
 
 
 
@@ -245,6 +246,65 @@ class BookList(ListView):
 	  	 args = {'queryset':queryset }
 	  	 return render(request,self.template_name,args)
 
+
+
+
+class BookDetail(DetailView):
+	
+	template_name = 'booklibrary/bookdetail.html'
+	def get(self,request,pk):
+		text = Comment.objects.filter(post_id= pk).order_by('-created_on')
+		model = Post
+		obj = Post.objects.get(pk=pk)
+		is_liked = False
+		is_favourite =False
+		if obj.likes.filter(id=request.user.id).exists():
+			is_liked =True
+		if obj.favourite.filter(id=request.user.id).exists():
+			is_favourite =True
+
+	
+			
+		context =    {'text':text,'obj':obj,'is_liked':is_liked,'total_likes':obj.total_likes(),'is_favourite':is_favourite}
+		return render(request, self.template_name, context)
+
+
+def userfavourite_book(request):
+	user = request.user
+	favourite_posts = user.favourite.all()
+	
+	query = request.GET.get('q')
+	if query:
+	  	 	favourite_posts =favourite_posts.filter(Q(title__icontains=query)|
+						   Q(text__icontains=query)|
+						   Q(author__icontains=query)
+						  
+						   )
+	paginator = Paginator( favourite_posts,24)
+	page = request.GET.get('page')
+	favourite_posts = paginator.get_page(page)
+	try:
+	  	 	 favourite_posts = paginator.page(page)
+	except PageNotAnInteger:
+	  	 	 favourite_posts = paginator.page(1)
+	except EmptyPage:
+		favourite_posts = paginator.page(paginator.num_page)
+ 
+	context ={'favourite_posts':favourite_posts}
+	return render(request,'booklibrary/userfavourite_book.html',context)
+
+
+
+def favourite_book(request,id):
+	obj = get_object_or_404(Post,id=id)
+	if obj.favourite.filter(id=request.user.id).exists():
+		obj.favourite.remove(request.user)
+	else:
+			obj.favourite.add(request.user)
+	return HttpResponseRedirect(obj.get_absolute_url())			
+
+
+
 class BookListdemo(ListView):
 	 model = Category
 	 template_name = 'booklibrary/booklistdemo.html'
@@ -258,17 +318,16 @@ class Usersview(TemplateView):
 	 template_name = 'booklibrary/community.html'
 	 def get(self,request):
 
-		 users = User.objects.exclude(id=request.user.id)
-		 
+		 users = User.objects.exclude(id=request.user.id).order_by('?')
 		 #friend = Friend.objects.get(current_user=request.user)
-		 friends = Friend.objects.all()
+		 #friends = Friend.objects.all()
 		 #ends = Friend.objects.all()
 		 query = request.GET.get('q')
 		 if query:
 		 	#friends  = friends .filter(username__icontains=query)
 		 	users = users .filter(username__icontains=query)
 								   
-		 args = {'users':users,'friends':friends }
+		 args = {'users':users }
 		 return render(request,self.template_name,args)
 
 
@@ -370,11 +429,11 @@ def edit_profile(request):
 			u_form =UserUpdateForm(instance=request.user.userprofile)
 			context = {'p_form':p_form,'u_form':u_form}
 			return render(request,'booklibrary/editprofile.html',context)
-
-def add_comment(request,post_id):
+'''
+def add_comment(request,id):
 	if request.method == 'POST':
 				
-				p_form = CommentForm(request.POST,post_id=post_id)
+				p_form = CommentForm(request.POST)
 				
 				if p_form.is_valid()  :
 						p_form.save()
@@ -385,13 +444,15 @@ def add_comment(request,post_id):
 			
 			context = {'p_form':p_form}
 			return render(request,'booklibrary/addcomment.html',context)
+			
 
-
+'''
 
 def change_friends(request,operation,pk):
 	
 	new_friend = User.objects.get(pk=pk)
 	if operation == 'add':
+
 			Friend.make_friend(request.user,new_friend)
 	elif operation == 'remove':
 		Friend.lose_friend(request.user,new_friend)
