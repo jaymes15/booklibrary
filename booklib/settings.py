@@ -135,7 +135,7 @@ USE_TZ = True
 
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['obscure-bayou-10683.herokuapp.com']
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 

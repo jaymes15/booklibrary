@@ -16,6 +16,7 @@ from django.views.generic import TemplateView
 from django.db.models import Q
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 from django.http import HttpResponseRedirect
+import requests
 
 
 # Create your views here.
@@ -28,6 +29,15 @@ def add_post(request):
   	return redirect('booklibrary:book_paste_list') 
  return render(request, 'booklibrary/post_form.html',{ 'form': form })
 ''' 
+def index(request):
+	r = requests.get('http://httpbin.org/status/418')
+	print(r.text)
+	return HttpResponse('<pre>' + r.text + '</pre>')
+
+
+
+
+
 @login_required(login_url="/login/")
 def	add_post(request):
 	if request.method =='POST':
