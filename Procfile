@@ -1,1 +1,1 @@
-worker: python manage.py runserver -p $PORT
+worker: python booklibrary.py runserver -p $PORT
